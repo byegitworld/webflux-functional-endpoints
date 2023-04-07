@@ -16,11 +16,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class PersonHandler {
     private final PersonService personService;
-
-    public Mono<ServerResponse> ping(ServerRequest request) {
-        return ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
-            .bodyValue(request.toString());
-    }
     
     public Mono<ServerResponse> getPerson(ServerRequest request) {
         Mono<PersonDto> personDtoMono = personService.retrievePerson(Long.valueOf(request.pathVariable("id")));

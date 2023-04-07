@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.PersonDto;
-import com.example.demo.error.ServerException;
-import com.example.demo.error.Error;
 import com.example.demo.mapper.PersonMapper;
 import com.example.demo.repository.PersonRepository;
 
@@ -20,13 +20,13 @@ public class PersonService {
 
     public Mono<PersonDto> retrievePerson(Long id) {
         return personRepository.findById(id)
-            .switchIfEmpty(Mono.defer(() -> Mono.error(new ServerException(Error.DATA_NOT_FOUND))))
+            .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, id + " can't found"))))
             .map(personMapper::mapToPersonDto);
     }
 
     public Flux<PersonDto> retrievePeople() {
         return personRepository.findAll()
-            .map(personMapper::mapToPersonDto)
-            .switchIfEmpty(Mono.defer(() -> Mono.error(new ServerException(Error.DATA_NOT_FOUND))));
+            .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "people can't found"))))
+            .map(personMapper::mapToPersonDto);
     }
 }

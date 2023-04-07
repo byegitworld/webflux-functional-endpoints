@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.server.HandlerFilterFunction;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 
 import reactor.core.publisher.Mono;
 
@@ -21,12 +22,12 @@ public class IdBlockFilter implements HandlerFilterFunction<ServerResponse, Serv
         try {
             String id = request.pathVariable("id");
             if (blockList.contains(id)) {
-                return ServerResponse.status(HttpStatus.FORBIDDEN).build();
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " is blcoked");
             } else {
                 return next.handle(request);
             }
         } catch (IllegalArgumentException e) {
-            return next.handle(request);
+            return ServerResponse.badRequest().build();
         }
     }
     
