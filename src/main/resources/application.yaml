@@ -3,10 +3,9 @@ logging:
     root: INFO
     org.springframework.web: INFO
     com.example.demo: DEBUG
-  # pattern:
-    # console: "%a %A %h %H %m %r %s %D %U %S %v %I %n"
 
 server.error.include-message: always
+server.shutdown: graceful
 
 postgresql:
   host: localhost
@@ -14,3 +13,8 @@ postgresql:
   database: postgres
   username: postgres
   password: 1234
+
+redis:
+  host: localhost
+  port: 6379
+  
